@@ -1,0 +1,12 @@
+{
+ :deps
+ {
+  org.clojure/clojure         {:mvn/version "1.10.1"}
+  org.clojure/core.async      {:mvn/version "1.3.610"}
+  org.clojure/data.generators {:mvn/version "0.1.2"}
+  com.cognitect/anomalies     {:mvn/version "0.1.12"}
+  com.datomic/client-cloud    {:mvn/version "0.8.113"}
+  com.stuartsierra/component  {:mvn/version "1.0.0"}
+  meander/epsilon             {:mvn/version "0.0.602"}}
+
+ :paths ["src"]}
