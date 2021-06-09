@@ -3,7 +3,7 @@
    [clojure.core.async :as async :refer [<!! chan onto-chan pipeline]]
    [clojure.set :refer [difference intersection]]
    [clojure.spec.alpha :as s]
-   [com.6pages.datomic :as dd]
+   [com.6pages.datomic :as d]
    [com.6pages.datomic.schema :as schema]))
 
 
@@ -49,7 +49,7 @@
   (->> entity
        entity->retract-fact
        vector
-       (dd/transact! opts)))
+       (d/transact! opts)))
 
 
 ;;
@@ -57,7 +57,7 @@
 
 (defn attribute-predicates
   [{:keys [:schemas] :as opts}]
-  {:pre [(s/valid? (s/coll-of ::schema/def) schemas)]}
+  {:pre [(s/valid? ::schema/coll schemas)]}
   (let [cardk->attrs #(->> [[:db/valueType :db.type/ref]
                             [:db/cardinality %]]
                            (apply schema/->filter schemas)
@@ -94,8 +94,8 @@
   (let [attrs (select-keys entity unique-ks)]
     (when-not (empty? attrs)
       (some->> attrs
-               (dd/->query ['*])
-               (dd/q dopts)
+               (d/->query ['*])
+               (d/q dopts)
                ;; TODO exception for many results (should only be 1, if
                ;; truly unique)
                ffirst
@@ -264,7 +264,7 @@
 (defn entity->clean-attrs
   [opts entity]
   (let [{:keys [:schemas]} opts
-        ks (->> opts :schemas
+        ks (->> schemas flatten
                 (mapv :db/ident)
                 (concat [:db/id :db/entity])
                 (into []))]
@@ -325,7 +325,7 @@
     (onto-chan ech fes)
 
     (pipeline
-     50 dpch  ;; low gain when > 50
+     50 dpch  ;; low gain when > 50 (though may depend on size of [fes])
      (comp
       (map #(entity->assoc-db dopts opts %))
       (map entity->ensure-id))
@@ -404,6 +404,7 @@
          (flat-entities->loaded dopts opts)
          (apply flat-entities->facts dopts opts))))
 
+
 ;;
 ;; entity->transact!
 
@@ -415,7 +416,7 @@
                  (entity->flatten opts)
                  (flat-entities->loaded dopts opts))
         facts (apply flat-entities->facts dopts opts lrs)
-        txrs (dd/transact! dopts facts)]
+        txrs (d/transact! dopts facts)]
     (->> lrs second  ;; flat entities with updated :db/id's
          (map #(dissoc % :db/entity))
          (map #(entity->replace-ids opts (first lrs) %))
