@@ -50,7 +50,7 @@
 
   (def opts {:client client :db-name db-name})
   (def topts
-    {:schemas (flatten schemas)
+    {:schemas schemas
      :unique-attrs (ds/schemas->unique-attrs schemas)})
 
   (d/create-db opts)

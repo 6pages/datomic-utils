@@ -102,7 +102,7 @@
   [opts schemas]
   {:pre [(s/valid? ::by-version schemas)]}
   (->validate schemas)
-  (version->ensure! schemas)
+  (version->ensure! opts schemas)
   (let [svd (version opts)
         nums (range
               (inc (::version svd))
