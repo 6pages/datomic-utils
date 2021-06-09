@@ -5,8 +5,16 @@
   org.clojure/core.async      {:mvn/version "1.3.610"}
   org.clojure/data.generators {:mvn/version "0.1.2"}
   com.cognitect/anomalies     {:mvn/version "0.1.12"}
-  com.datomic/client-cloud    {:mvn/version "0.8.113"}
-  com.stuartsierra/component  {:mvn/version "1.0.0"}
-  meander/epsilon             {:mvn/version "0.0.602"}}
+  com.datomic/client-cloud    {:mvn/version "0.8.113"}}
 
- :paths ["src"]}
+ :paths ["src"]
+
+ :aliases
+ {
+  :local
+  {
+   :extra-deps
+   {com.datomic/dev-local {:mvn/version "0.9.232"}}}}
+
+ :mvn/repos
+ {"datomic-cloud" {:url "s3://datomic-releases-1fc2183a/maven/releases"}}}
