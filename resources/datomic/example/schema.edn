@@ -1,0 +1,27 @@
+[
+
+ ;; version 0
+ [
+  ;; schema
+  {:db/ident       :com.6pages.datomic.schema/version
+   :db/valueType   :db.type/long
+   :db/cardinality :db.cardinality/one}]
+
+ ;; version 1
+ [
+  ;; Person
+  {:db/ident       :person/id
+   :db/valueType   :db.type/uuid
+   :db/unique      :db.unique/identity
+   :db/cardinality :db.cardinality/one}
+  {:db/ident       :person/name
+   :db/valueType   :db.type/string
+   :db/cardinality :db.cardinality/one}]
+
+ ;; version 2
+ [
+  ;; 
+  {:db/ident       :person/friend
+   :db/valueType   :db.type/ref
+   :db/cardinality :db.cardinality/many}]
+ ]
