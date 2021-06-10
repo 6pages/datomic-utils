@@ -1,7 +1,13 @@
 # datomic-utils
 
-Utilities for working Datomic. Built and running in production at
-[6Pages](https://www.6pages.com).
+Utilities for working Datomic.
+
+
+## Status
+
+Built and running in production at [6Pages](https://www.6pages.com).
+
+Unstable and subject to change. Let's call it an _early_ release.
 
 
 ## Features
@@ -156,8 +162,71 @@ queries.
 
 ## Usage
 
+### In a Clojure project
+
+
+### REPL and tests
+
+1. [setup dev-local](https://docs.datomic.com/cloud/dev-local.html)
+2. `clj -A:local -A:dev` (you may also want to add a REPL server, if you're into that sort of thing)
+
+
 
 ## Questions (FAQ)
+
+### I don't want  `entity->transact!` to issue the transaction. Can I just get the generated facts?
+
+Yes. See `com.6pages.datomic.transact/entity->delta-facts`.
+
+
+### How performant is `entity->transact!`?
+
+Ideally, we would have some tests which show the difference in
+performance (soon to come). You can run your own test, like this:
+
+```clojure
+(ns user
+  (:require [com.6pages.datomic :as d]
+            [com.6pages.datomic.transact :as dt]))
+
+(def datomic-opts
+  {:client (d/client {}) :db-name "dev"})
+  
+(def transact-opts
+    {:schemas [ schemas... ]
+     :unique-attrs (ds/schemas->unique-attrs [ schemas... ])})  
+
+(def entity { generate deep entity... })
+
+(defn entity->retract!
+  [e]
+  (let [topts (dt/opts->ensure transact-opts)]
+    (d/transact!
+      datomic-opts
+      (->> e
+           (dt/entity->flatten topts)
+           (mapv dt/entity->retract-fact))))
+
+;; single thread
+(def entity-transacted
+  (time
+    (dt/entity->transact!
+      datomic-opts
+      (assoc transact-opts :async false)
+      entity)))
+      
+(entity->retract! entity-transacted)
+
+;; async
+(def entity-transacted2
+  (time
+    (dt/entity->transact!
+      datomic-opts
+      transact-opts
+      entity)))
+      
+(entity->retract! entity-transacted2)
+```
 
 ### Datomic's transactor has many features. Does it handle X?
 
@@ -176,7 +245,8 @@ that the transaction is issued.
 
 #### transaction functions
 
-
+No current support but if you have ideas for adding support, then
+please send issues/PRs.
 
 
 ## License
