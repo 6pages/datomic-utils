@@ -74,15 +74,90 @@ dozens of entities on a single thread can be slow.
 
 ### schema migrations
 
+Datomic recommends that we [grow our schema and never break
+it](https://docs.datomic.com/cloud/best.html#grow-schema). However,
+they leave it up to us (the user) to decide how to manage the
+migrations of schema accumulation.
+
+This library includes a simple solution. 
+
++ Your application code keeps a collection of schemas
++ `com.6pages.datomic.schema` stores an applied schema version number in Datomic
++ whenever you add new schemas (new schema version), `com.6pages.datomic.schema/update!` will make sure that all schema collections have been transacted up to the most recent version
+
+Here's what a collection of schemas might look like:
+
+```clojure
+[
+ ;; version 0
+ [
+  ;; schema
+  {:db/ident       :com.6pages.datomic.schema/version
+   :db/valueType   :db.type/long
+   :db/cardinality :db.cardinality/one}]
+
+ ;; version 1
+ [
+  ;; Person
+  {:db/ident       :person/id
+   :db/valueType   :db.type/uuid
+   :db/unique      :db.unique/identity
+   :db/cardinality :db.cardinality/one}
+  {:db/ident       :person/name
+   :db/valueType   :db.type/string
+   :db/cardinality :db.cardinality/one}]
+
+ ;; version 2
+ [
+  ;; 
+  {:db/ident       :person/friend
+   :db/valueType   :db.type/ref
+   :db/cardinality :db.cardinality/many}]
+ ]
+```
+
+You must explicitly define the attribute storing the schema version in
+your first version (there's a validation exception if you forget).
+
+As you need to add more schema definitions, you simply add another
+version collection and run `com.6pages.datomic.schema/update!` on all
+your databases.
+
 
 ### query abstraction
 
+The most of my Datomic query look like:
+
+```clojure
+(d/q
+  db
+  '[:find (pull ?e [*])
+    :in $ ?id
+    :where
+    [?e ::id ?id]]
+  person-id)
+```
+
+This library has some simple abstractions to build these types of
+queries.
+
+```clojure
+(ns person
+  (:require [com.6pages.datomic :as d]))
+  
+(def opts
+  {:client (d/client {}) :db-name "dev"})
+  
+(d/p-> opts ['*] [[::id id]]) ;; single result
+
+(d/p->> opts ['*] [[::name "Bob"]]) ;; collection of results
+```
 
 
 ## Usage
 
 
-## Questions
+## Questions (FAQ)
 
 ### Datomic's transactor has many features. Does it handle X?
 
