@@ -84,7 +84,7 @@ dozens of entities on a single thread can be slow.
 
 ## Questions
 
-### Datomic's transactor has feature. Does it handle X?
+### Datomic's transactor has many features. Does it handle X?
 
 Probably not, but augmenting the library is open for discussion. Some
 already considered directions are:
