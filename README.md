@@ -192,11 +192,14 @@ performance (soon to come). You can run your own test, like this:
 (def datomic-opts
   {:client (d/client {}) :db-name "dev"})
   
+(def schemas []) ;; load your schemas
 (def transact-opts
-    {:schemas [ schemas... ]
-     :unique-attrs (ds/schemas->unique-attrs [ schemas... ])})  
+    {:schemas schemas
+     :unique-attrs (ds/schemas->unique-attrs schemas)})  
 
-(def entity { generate deep entity... })
+(def entity {
+ ;; generate a deep entity...
+})
 
 (defn entity->retract!
   [e]
