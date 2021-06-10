@@ -10,20 +10,20 @@
 
  :aliases
  {
-  :local
-  {
-   :extra-deps
-   {
-    com.datomic/dev-local {:mvn/version "0.9.232"}}}
+  :deploy {:replace-deps {slipset/deps-deploy {:mvn/version "0.1.5"}}
+           :exec-fn deps-deploy.deps-deploy/deploy
+           :exec-args {:installer :remote :artifact "6pages-datomic-utils.jar"}}
+  
+  :dev {:extra-deps {org.clojure/data.generators {:mvn/version "0.1.2"}}
+        :extra-paths ["dev" "resources"]}
 
-  :dev
-  {
-   :extra-deps
-   {
-    org.clojure/data.generators {:mvn/version "0.1.2"}}
-   
-   :extra-paths ["resources"]}}
+  :jar {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.0.216"}}
+        :exec-fn hf.depstar/jar
+        :exec-args {:jar "6pages-datomic-utils.jar"
+                    :sync-pom true
+                    :verbose true
+                    :version "0.0.1"}}
 
- :mvn/repos
- {
-  "datomic-cloud" {:url "s3://datomic-releases-1fc2183a/maven/releases"}}}
+  :local {:extra-deps {com.datomic/dev-local {:mvn/version "0.9.232"}}}}
+
+ :mvn/repos {"datomic-cloud" {:url "s3://datomic-releases-1fc2183a/maven/releases"}}}
