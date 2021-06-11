@@ -27,13 +27,10 @@ You have a schema that includes deeply nested data, like this entity:
 {:blog/posts
    [
     {:post/title "Crypto eats compute"
-     :post/tags
-     [{:tag/name "Cryptocurrencies"}]}
+     :post/tags [{:tag/name "Cryptocurrencies"}]}
 
     {:post/title "Machine learning eats compute"
-     :post/tags
-     [
-      {:tag/name "Machine Learning"}]}]}
+     :post/tags [{:tag/name "Machine Learning"}]}]}
 ```
 
 Let's say that the `:tag/name` attribute is intended to be unique
