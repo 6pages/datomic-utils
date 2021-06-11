@@ -297,6 +297,15 @@ No current support but if you have ideas for adding support, then
 please send issues/PRs.
 
 
+## Related work
+
++ [avodonosov/datomic-helpers](https://github.com/avodonosov/datomic-helpers)
++ [halgari/fafnir](https://github.com/halgari/fafnir)
++ [flyingmachine/datomic-junk](https://github.com/flyingmachine/datomic-junk)
++ [lilactown/autonormal](https://github.com/lilactown/autonormal)
++ [edn-query-language/eql](https://github.com/edn-query-language/eql)
+
+
 ## License
 
 Copyright © 2021 6Pages Inc.
