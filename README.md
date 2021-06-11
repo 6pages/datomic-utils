@@ -2,6 +2,10 @@
 
 Utilities for working with Datomic.
 
+[![Clojars Project](https://img.shields.io/clojars/v/com.6pages/datomic-utils.svg)](https://clojars.org/com.6pages/datomic-utils)
+
+[![](https://cljdoc.org/badge/com.6pages/datomic-utils)](https://cljdoc.org/jump/release/com.6pages/datomic-utils)
+
 
 ## Status
 
