@@ -191,23 +191,24 @@ queries.
 4. apply your schema
 
 ```clojure
-(ds/update! opts [
-   [{:db/ident       :com.6pages.datomic.schema/version
-     :db/valueType   :db.type/long
-     :db/cardinality :db.cardinality/one}]
-   [{:db/ident       :person/id
-     :db/valueType   :db.type/uuid
-     :db/unique      :db.unique/identity
-     :db/cardinality :db.cardinality/one}
-    {:db/ident       :person/name
-     :db/valueType   :db.type/string
-     :db/cardinality :db.cardinality/one}]])
+(def schemas [
+  [{:db/ident       :com.6pages.datomic.schema/version
+    :db/valueType   :db.type/long
+    :db/cardinality :db.cardinality/one}]
+  [{:db/ident       :person/id
+    :db/valueType   :db.type/uuid
+    :db/unique      :db.unique/identity
+    :db/cardinality :db.cardinality/one}
+   {:db/ident       :person/name
+    :db/valueType   :db.type/string
+    :db/cardinality :db.cardinality/one}]])
+     
+(ds/update! opts schemas)
 ```
 
 5. transact!
 
 ```clojure
-(def schemas []) ;; load your schemas
 (def transact-opts
   {:schemas schemas
    :unique-attrs (ds/schemas->unique-attrs schemas)})
