@@ -1,6 +1,6 @@
 # datomic-utils
 
-Utilities for working Datomic.
+Utilities for working with Datomic.
 
 
 ## Status
@@ -164,6 +164,51 @@ queries.
 
 ### In a Clojure project
 
+1. [add to dependencies](https://clojars.org/com.6pages/datomic-utils)
+
+2. require in a namespace
+
+```clojure
+(ns person
+  (:require 
+    [com.6pages.datomic :as d]
+    [com.6pages.datomic.schema :as ds]
+    [com.6pages.datomic.transact :as dt]))
+```
+
+3. build Datomic client options
+
+```clojure
+(def opts
+  {:db-name "dev"
+   :client 
+    (d/client 
+    ;; use your own Datomic client config
+    {:server-type :dev-local
+     :system "datomic-samples"})})
+```
+
+4. apply your schema
+
+```clojure
+(ds/update! opts [
+   [{:db/ident       :com.6pages.datomic.schema/version
+     :db/valueType   :db.type/long
+     :db/cardinality :db.cardinality/one}]
+   [{:db/ident       :person/id
+     :db/valueType   :db.type/uuid
+     :db/unique      :db.unique/identity
+     :db/cardinality :db.cardinality/one}
+    {:db/ident       :person/name
+     :db/valueType   :db.type/string
+     :db/cardinality :db.cardinality/one}]])
+```
+
+5. transact!
+
+```clojure
+(dt/entity->transact!
+```
 
 ### REPL and tests
 
