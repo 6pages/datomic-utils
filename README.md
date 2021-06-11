@@ -5,7 +5,7 @@ Utilities for working Datomic.
 
 ## Status
 
-Built and running in production at [6Pages](https://www.6pages.com).
+Running in production at [6Pages](https://www.6pages.com).
 
 Unstable and subject to change. Let's call it an _early_ release.
 

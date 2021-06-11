@@ -19,10 +19,7 @@
 
   :jar {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.0.216"}}
         :exec-fn hf.depstar/jar
-        :exec-args {:jar "6pages-datomic-utils.jar"
-                    :sync-pom true
-                    :verbose true
-                    :version "0.0.1"}}
+        :exec-args {:jar "6pages-datomic-utils.jar" :sync-pom true}}
 
   :local {:extra-deps {com.datomic/dev-local {:mvn/version "0.9.232"}}}}
 

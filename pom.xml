@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>6pages</groupId>
+  <groupId>com.6pages</groupId>
   <artifactId>datomic-utils</artifactId>
   <version>0.0.1</version>
   <name>datomic-utils</name>
@@ -12,6 +12,11 @@
       <version>1.10.1</version>
     </dependency>
     <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>core.async</artifactId>
+      <version>1.3.610</version>
+    </dependency>
+    <dependency>
       <groupId>com.cognitect</groupId>
       <artifactId>anomalies</artifactId>
       <version>0.1.12</version>
@@ -20,11 +25,6 @@
       <groupId>com.datomic</groupId>
       <artifactId>client-cloud</artifactId>
       <version>0.8.113</version>
-    </dependency>
-    <dependency>
-      <groupId>org.clojure</groupId>
-      <artifactId>core.async</artifactId>
-      <version>1.3.610</version>
     </dependency>
   </dependencies>
   <build>
