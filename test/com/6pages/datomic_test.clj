@@ -1,4 +1,4 @@
-(ns com.6pages.datomic.transact-test
+(ns com.6pages.datomic-test
   (:require
    [clojure.data.generators :as gen]
    [clojure.edn :as edn]
@@ -6,8 +6,7 @@
    [clojure.spec.alpha :as s]
    [clojure.test :refer [deftest is]]
    [com.6pages.datomic :as d]
-   [com.6pages.datomic.schema :as ds]
-   [com.6pages.datomic.transact :as dt])
+   [com.6pages.datomic.schema :as ds])
   (:import
    [java.util Date UUID]))
 
@@ -27,13 +26,6 @@
   (-> "datomic/example/schema.edn"
       io/resource slurp
       edn/read-string))
-
-(defmacro with-transact-opts
-  [sym & body]
-  `(let [~sym {:schemas ~schemas
-               :unique-attrs
-               (ds/schemas->unique-attrs ~schemas)}]
-     ~@body))
 
 (defmacro with-db
   [opts & body]
@@ -55,14 +47,15 @@
    {:person/id (UUID/randomUUID)
     :person/name (gen/string)}))
 
-(deftest returns-db-id
-  (with-datomic-opts dopts
-    (with-db dopts
-      (with-transact-opts topts
+(deftest pull-single
+  (with-datomic-opts opts
+    (with-db opts
 
-        (let [pd (->person)
-              tr (dt/entity->transact! dopts topts pd)
-              qr (d/p-> dopts ['*] [[:person/id (:person/id pd)]])]
-          (is
-           (= (:db/id tr)
-              (:db/id qr))))))))
+      (let [pd (->person)
+            _ (d/transact! opts pd)
+            qr (d/p-> opts ['*] [[:person/id (:person/id pd)]])]
+        (is
+         (every?
+          (fn [k]
+            (= (get pd k) (get qr k)))
+          (keys pd)))))))
