@@ -207,7 +207,16 @@ queries.
 5. transact!
 
 ```clojure
-(dt/entity->transact!
+(def schemas []) ;; load your schemas
+(def transact-opts
+  {:schemas schemas
+   :unique-attrs (ds/schemas->unique-attrs schemas)})
+     
+(def entity
+  (dt/entity->transact! 
+    opts transact-opts
+    [{:person/id (java.util.UUID/randomUUID)
+      :person/name "Ada"}]))
 ```
 
 ### REPL and tests
@@ -240,7 +249,7 @@ performance (soon to come). You can run your own test, like this:
 (def schemas []) ;; load your schemas
 (def transact-opts
     {:schemas schemas
-     :unique-attrs (ds/schemas->unique-attrs schemas)})  
+     :unique-attrs (ds/schemas->unique-attrs schemas)})
 
 (def entity {
  ;; generate a deep entity...
